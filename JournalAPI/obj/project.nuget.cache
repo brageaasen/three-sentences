@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "lk7AyA8Bn1I=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\brage\\Desktop\\proj\\three-sentences\\JournalAPI\\JournalAPI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\brage\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.3\\microsoft.aspnetcore.openapi.9.0.3.nupkg.sha512",
+    "C:\\Users\\brage\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
