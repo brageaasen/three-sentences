@@ -1,35 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Box, Button, Input, VStack, useToast } from "@chakra-ui/react";
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [text, setText] = useState("");
+  const toast = useToast();
+
+  const handleSave = async () => {
+    if (!text.trim()) return;
+
+    try {
+      await fetch("http://localhost:5235/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text,
+          date: new Date().toISOString(),
+        }),
+      });
+
+      toast({
+        title: "Saved!",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+
+      setText("");
+    } catch (err) {
+      console.error("Failed to save:", err);
+      toast({
+        title: "Error saving entry",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Box
+      height="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      bg="gray.50"
+    >
+      <VStack spacing={4}>
+        <Input
+          placeholder="Write your three sentences..."
+          size="lg"
+          width="400px"
+          bg="white"
+          boxShadow="md"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSave();
+            }
+          }}
+        />
+      </VStack>
+    </Box>
+  );
 }
 
-export default App
+export default App;

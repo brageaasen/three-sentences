@@ -75,19 +75,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\brage\\.nuget\\packages\\": {}
+    "/Users/brage/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\brage\\Desktop\\proj\\three-sentences\\JournalAPI\\JournalAPI.csproj",
+      "projectUniqueName": "/Users/brage/Desktop/proj/three-sentences/JournalAPI/JournalAPI.csproj",
       "projectName": "JournalAPI",
-      "projectPath": "C:\\Users\\brage\\Desktop\\proj\\three-sentences\\JournalAPI\\JournalAPI.csproj",
-      "packagesPath": "C:\\Users\\brage\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\brage\\Desktop\\proj\\three-sentences\\JournalAPI\\obj\\",
+      "projectPath": "/Users/brage/Desktop/proj/three-sentences/JournalAPI/JournalAPI.csproj",
+      "packagesPath": "/Users/brage/.nuget/packages/",
+      "outputPath": "/Users/brage/Desktop/proj/three-sentences/JournalAPI/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\brage\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/brage/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -141,7 +141,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.202/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
