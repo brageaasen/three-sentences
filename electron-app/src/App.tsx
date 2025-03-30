@@ -1,5 +1,6 @@
-import { Box, Button, Input, VStack, useToast } from "@chakra-ui/react";
+import { Box, Input, VStack, useToast, Flex } from "@chakra-ui/react";
 import { useState } from "react";
+import ColorModeToggle from "./components/ColorModeToggle";
 
 function App() {
   const [text, setText] = useState("");
@@ -44,23 +45,31 @@ function App() {
       alignItems="center"
       justifyContent="center"
       bg="gray.50"
+      _dark={{ bg: "gray.800" }}
     >
-      <VStack spacing={4}>
-        <Input
-          placeholder="Write your three sentences..."
-          size="lg"
-          width="400px"
-          bg="white"
-          boxShadow="md"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSave();
-            }
-          }}
-        />
-      </VStack>
+      <Flex justify="flex-end" p={4}>
+        <ColorModeToggle />
+      </Flex>
+      <Flex height="calc(100vh - 64px)" align="center" justify="center">
+        <VStack spacing={4}>
+          <Input
+            placeholder="Write your three sentences..."
+            size="lg"
+            width="400px"
+            bg="white"
+            color="black"
+            _dark={{
+              bg: "gray.700",
+              color: "white",
+              placeholder: { color: "gray.400" },
+            }}
+            boxShadow="md"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSave()}
+          />
+        </VStack>
+      </Flex>
     </Box>
   );
 }
