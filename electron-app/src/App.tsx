@@ -1,4 +1,4 @@
-import { Box, Flex, VStack, useToast } from "@chakra-ui/react";
+import { Box, Flex, VStack, Text, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import ColorModeToggle from "./components/ColorModeToggle";
 import JournalInput from "./components/JournalInput";
@@ -65,6 +65,9 @@ function App() {
             tagInput={tagInput}
             setTagInput={setTagInput}
           />
+          <Text fontSize="sm" color="gray.500" alignSelf="flex-end">
+            {text.length}/300 characters
+          </Text>
         </VStack>
       </Flex>
     </Box>
