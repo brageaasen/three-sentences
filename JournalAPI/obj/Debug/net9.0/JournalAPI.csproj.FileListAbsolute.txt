@@ -66,3 +66,4 @@ C:/Users/brage/Desktop/proj/three-sentences/JournalAPI/obj/Debug/net9.0/ref/Jour
 /Users/brage/Desktop/proj/three-sentences/JournalAPI/obj/Debug/net9.0/JournalAPI.pdb
 /Users/brage/Desktop/proj/three-sentences/JournalAPI/obj/Debug/net9.0/JournalAPI.genruntimeconfig.cache
 /Users/brage/Desktop/proj/three-sentences/JournalAPI/obj/Debug/net9.0/ref/JournalAPI.dll
+/Users/brage/Desktop/proj/three-sentences/JournalAPI/bin/Debug/net9.0/entries.json
