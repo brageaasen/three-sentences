@@ -4,6 +4,7 @@ Three Sentences is a lightweight journaling app that encourages daily reflection
 Built with a modern React + Chakra UI frontend, a .NET backend, and wrapped in Electron for a smooth desktop experience.
 
 Too tired to write? Just jot down a few words. Three Sentences helps you reflect without pressure, and lets you explore your mood and patterns over time through visual tools and a calming interface.
+
 ---
 
 ## Features
