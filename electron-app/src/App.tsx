@@ -1,8 +1,13 @@
-import { Box, Button, Input, VStack, useToast } from "@chakra-ui/react";
+import { Box, Flex, VStack, Text, useToast } from "@chakra-ui/react";
 import { useState } from "react";
+import ColorModeToggle from "./components/ColorModeToggle";
+import JournalInput from "./components/JournalInput";
+import TagsInput from "./components/TagsInput";
 
 function App() {
   const [text, setText] = useState("");
+  const [tagInput, setTagInput] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
   const toast = useToast();
 
   const handleSave = async () => {
@@ -15,8 +20,13 @@ function App() {
         body: JSON.stringify({
           text,
           date: new Date().toISOString(),
+          tags,
         }),
       });
+
+      setText("");
+      setTagInput("");
+      setTags([]);
 
       toast({
         title: "Saved!",
@@ -24,10 +34,8 @@ function App() {
         duration: 2000,
         isClosable: true,
       });
-
-      setText("");
     } catch (err) {
-      console.error("Failed to save:", err);
+      console.error("Error saving entry:", err);
       toast({
         title: "Error saving entry",
         status: "error",
@@ -40,27 +48,28 @@ function App() {
   return (
     <Box
       height="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
       bg="gray.50"
+      _dark={{ bg: "gray.800" }}
+      position="relative"
     >
-      <VStack spacing={4}>
-        <Input
-          placeholder="Write your three sentences..."
-          size="lg"
-          width="400px"
-          bg="white"
-          boxShadow="md"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSave();
-            }
-          }}
-        />
-      </VStack>
+      <Box position="absolute" top={4} right={4}>
+        <ColorModeToggle />
+      </Box>
+
+      <Flex height="100%" align="center" justify="center">
+        <VStack spacing={4}>
+          <JournalInput value={text} onChange={setText} onEnter={handleSave} />
+          <TagsInput
+            tags={tags}
+            setTags={setTags}
+            tagInput={tagInput}
+            setTagInput={setTagInput}
+          />
+          <Text fontSize="sm" color="gray.500" alignSelf="flex-end">
+            {text.length}/300 characters
+          </Text>
+        </VStack>
+      </Flex>
     </Box>
   );
 }
