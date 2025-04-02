@@ -1,115 +1,55 @@
 [
   {
-    "Text": "Hello!",
-    "Date": "2025-03-29T21:44:04.254Z",
-    "Tags": null
-  },
-  {
-    "Text": "This is so cool!",
-    "Date": "2025-03-29T21:45:29.185Z",
-    "Tags": null
-  },
-  {
-    "Text": "Todays first",
-    "Date": "2025-03-30T13:26:12.778Z",
-    "Tags": [
-      "grateful",
-      "focus"
-    ]
-  },
-  {
-    "Text": "First with tags",
-    "Date": "2025-03-30T13:28:57.847Z",
-    "Tags": [
-      "grateful",
-      "focus"
-    ]
-  },
-  {
-    "Text": "Test",
-    "Date": "2025-03-30T13:33:14.679Z",
-    "Tags": [
-      "grateful"
-    ]
-  },
-  {
-    "Text": "empty",
-    "Date": "2025-03-30T13:33:29.687Z",
+    "Text": "hello",
+    "Date": "2025-04-02T13:07:59.879Z",
     "Tags": []
   },
   {
-    "Text": "Test",
-    "Date": "2025-03-30T13:39:46.622Z",
-    "Tags": []
-  },
-  {
-    "Text": "t",
-    "Date": "2025-03-30T13:41:43.854Z",
-    "Tags": []
-  },
-  {
-    "Text": "with tags",
-    "Date": "2025-03-30T13:46:27.252Z",
-    "Tags": []
-  },
-  {
-    "Text": "now with tags",
-    "Date": "2025-03-30T13:46:43.893Z",
+    "Text": "Second entry",
+    "Date": "2025-04-02T13:08:27.439Z",
     "Tags": [
-      "tag",
-      "yippie"
+      "happy",
+      "sad"
     ]
   },
   {
-    "Text": "a",
-    "Date": "2025-03-30T13:49:32.352Z",
+    "Text": "new",
+    "Date": "2025-04-02T13:08:36.884Z",
+    "Tags": [
+      "sad"
+    ]
+  },
+  {
+    "Text": "Very joyfull today!",
+    "Date": "2025-04-02T13:12:12.326Z",
+    "Tags": [
+      "happy"
+    ]
+  },
+  {
+    "Text": "testing",
+    "Date": "2025-04-02T13:15:47.222Z",
+    "Tags": [
+      "sad"
+    ]
+  },
+  {
+    "Text": "sad",
+    "Date": "2025-04-02T13:15:51.709Z",
     "Tags": []
   },
   {
     "Text": "Hello",
-    "Date": "2025-03-30T13:50:57.525Z",
+    "Date": "2025-04-02T13:22:28.564Z",
     "Tags": [
-      "tags"
+      "Trying"
     ]
   },
   {
-    "Text": "Modulated",
-    "Date": "2025-03-30T13:54:18.086Z",
+    "Text": "Newest",
+    "Date": "2025-04-02T13:25:46.593Z",
     "Tags": [
-      "mod"
-    ]
-  },
-  {
-    "Text": "test",
-    "Date": "2025-03-30T14:13:22.659Z",
-    "Tags": [
-      "test"
-    ]
-  },
-  {
-    "Text": "hi",
-    "Date": "2025-03-30T14:16:54.927Z",
-    "Tags": [
-      "hi"
-    ]
-  },
-  {
-    "Text": "Hello, this is the first entry to my notebook.",
-    "Date": "2025-03-30T14:26:18.193Z",
-    "Tags": []
-  },
-  {
-    "Text": "Hello this is my first long journal entry, I need more text so.. Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hello, Hell",
-    "Date": "2025-03-30T14:35:12.412Z",
-    "Tags": [
-      "Long"
-    ]
-  },
-  {
-    "Text": "Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test.",
-    "Date": "2025-03-30T14:40:51.693Z",
-    "Tags": [
-      "Test"
+      "new"
     ]
   }
 ]

@@ -3,8 +3,13 @@ import { useState } from "react";
 import ColorModeToggle from "./components/ColorModeToggle";
 import JournalInput from "./components/JournalInput";
 import TagsInput from "./components/TagsInput";
+import JournalOverview from "./components/JournalOverview";
 
 function App() {
+  // Track current screen: "entry" or "overview"
+  const [screen, setScreen] = useState<"entry" | "overview">("entry");
+
+  // Journal entry and tags state
   const [text, setText] = useState("");
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -14,7 +19,7 @@ function App() {
     if (!text.trim()) return;
 
     try {
-      await fetch("http://localhost:5235/save", {
+      await fetch("http://localhost:5235/entries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -27,6 +32,7 @@ function App() {
       setText("");
       setTagInput("");
       setTags([]);
+      setScreen("overview");
 
       toast({
         title: "Saved!",
@@ -56,20 +62,28 @@ function App() {
         <ColorModeToggle />
       </Box>
 
-      <Flex height="100%" align="center" justify="center">
-        <VStack spacing={4}>
-          <JournalInput value={text} onChange={setText} onEnter={handleSave} />
-          <TagsInput
-            tags={tags}
-            setTags={setTags}
-            tagInput={tagInput}
-            setTagInput={setTagInput}
-          />
-          <Text fontSize="sm" color="gray.500" alignSelf="flex-end">
-            {text.length}/300 characters
-          </Text>
-        </VStack>
-      </Flex>
+      {screen === "entry" ? (
+        <Flex height="100%" align="center" justify="center">
+          <VStack spacing={4}>
+            <JournalInput
+              value={text}
+              onChange={setText}
+              onEnter={handleSave}
+            />
+            <TagsInput
+              tags={tags}
+              setTags={setTags}
+              tagInput={tagInput}
+              setTagInput={setTagInput}
+            />
+            <Text fontSize="sm" color="gray.500" alignSelf="flex-end">
+              {text.length}/300 characters
+            </Text>
+          </VStack>
+        </Flex>
+      ) : (
+        <JournalOverview onBack={() => setScreen("entry")} />
+      )}
     </Box>
   );
 }
