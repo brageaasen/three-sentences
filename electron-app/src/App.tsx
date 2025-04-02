@@ -3,6 +3,7 @@ import { useState } from "react";
 import ColorModeToggle from "./components/ColorModeToggle";
 import JournalInput from "./components/JournalInput";
 import TagsInput from "./components/TagsInput";
+import AnimatedLogo from "./components/AnimatedLogo";
 import JournalOverview from "./components/JournalOverview";
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
       {screen === "entry" ? (
         <Flex height="100%" align="center" justify="center">
           <VStack spacing={4}>
+            <AnimatedLogo />
             <JournalInput
               value={text}
               onChange={setText}
