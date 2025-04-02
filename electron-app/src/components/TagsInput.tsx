@@ -15,7 +15,7 @@ const TagsInput = ({ tags, setTags, tagInput, setTagInput }) => (
       onKeyDown={(e) => {
         if (e.key === "Enter" && tagInput.trim()) {
           e.preventDefault();
-          const newTag = tagInput.trim().replace(/^#/, "");
+          const newTag = tagInput.trim().replace(/^#/, "").toLowerCase();
           if (!tags.includes(newTag)) {
             setTags([...tags, newTag]);
           }
