@@ -10,24 +10,30 @@ namespace JournalAPI.Controllers
     {
         private const string FilePath = "entries.json";
 
-        [HttpPost]
-        public async Task<IActionResult> SaveEntry([FromBody] JournalEntry entry)
-        {
-            List<JournalEntry> existing = new();
+[HttpPost]
+public async Task<IActionResult> SaveEntry([FromBody] JournalEntry entry)
+{
+    // Auto-generate an Id if missing
+    if (string.IsNullOrWhiteSpace(entry.Id))
+    {
+        entry.Id = Guid.NewGuid().ToString();
+    }
 
-            if (System.IO.File.Exists(FilePath))
-            {
-                var json = await System.IO.File.ReadAllTextAsync(FilePath);
-                existing = JsonSerializer.Deserialize<List<JournalEntry>>(json) ?? new();
-            }
+    List<JournalEntry> existing = new();
 
-            existing.Add(entry);
+    if (System.IO.File.Exists(FilePath))
+    {
+        var json = await System.IO.File.ReadAllTextAsync(FilePath);
+        existing = JsonSerializer.Deserialize<List<JournalEntry>>(json) ?? new();
+    }
 
-            var updatedJson = JsonSerializer.Serialize(existing, new JsonSerializerOptions { WriteIndented = true });
-            await System.IO.File.WriteAllTextAsync(FilePath, updatedJson);
+    existing.Add(entry);
 
-            return Ok("Saved");
-        }
+    var updatedJson = JsonSerializer.Serialize(existing, new JsonSerializerOptions { WriteIndented = true });
+    await System.IO.File.WriteAllTextAsync(FilePath, updatedJson);
+
+    return Ok("Saved");
+}
 
         [HttpGet]
         public async Task<ActionResult<List<JournalEntry>>> GetEntries()
@@ -39,5 +45,36 @@ namespace JournalAPI.Controllers
             var entries = JsonSerializer.Deserialize<List<JournalEntry>>(json) ?? new();
             return entries;
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateEntry(string id, [FromBody] JournalEntry updatedEntry)
+        {
+            List<JournalEntry> entries;
+            if (System.IO.File.Exists(FilePath))
+            {
+                var json = await System.IO.File.ReadAllTextAsync(FilePath);
+                entries = JsonSerializer.Deserialize<List<JournalEntry>>(json) ?? new List<JournalEntry>();
+            }
+            else
+         {
+            return NotFound("No entries found.");
+         }
+
+         // Find the index of the entry with the matching id
+         var index = entries.FindIndex(e => e.Id == id);
+            if (index == -1)
+            {
+                return NotFound("Entry not found.");
+            }
+
+            // Update the entry (you could update just the text or more fields)
+            entries[index] = updatedEntry;
+
+            var updatedJson = JsonSerializer.Serialize(entries, new JsonSerializerOptions { WriteIndented = true });
+            await System.IO.File.WriteAllTextAsync(FilePath, updatedJson);
+
+            return Ok("Updated");
+        }
+
     }
 }
