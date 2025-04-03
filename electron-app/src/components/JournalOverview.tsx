@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
 import {
-  Box,
+  Container,
   Heading,
-  VStack,
-  HStack,
   Text,
   Button,
-  Spinner,
   Flex,
+  Box,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useEffect, useState, useMemo } from "react";
+import SearchBar from "./SearchBar";
+import TagFilter from "./TagFilter";
+import EntriesList from "./EntriesList";
 
 interface JournalEntry {
   text: string;
@@ -26,6 +27,7 @@ const JournalOverview = ({ onBack }: JournalOverviewProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filterTag, setFilterTag] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); // Search state
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -45,109 +47,61 @@ const JournalOverview = ({ onBack }: JournalOverviewProps) => {
   }, []);
 
   // Get unique tags for filtering
-  const uniqueTags = Array.from(
-    new Set(entries.flatMap((entry) => entry.tags)),
+  const uniqueTags = useMemo(
+    () => Array.from(new Set(entries.flatMap((entry) => entry.tags))),
+    [entries],
   );
 
-  // Filter entries based on selected tag
+  // Filter entries by tag if selected
   const filteredEntries = filterTag
     ? entries.filter((entry) => entry.tags.includes(filterTag))
     : entries;
 
-  // Sort entries so the newest come first:
-  const sortedEntries = [...filteredEntries].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
+  // Further filter entries by search term (case-insensitive)
+  const searchedEntries = useMemo(() => {
+    if (!searchTerm.trim()) return filteredEntries;
+    return filteredEntries.filter((entry) =>
+      entry.text.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [filteredEntries, searchTerm]);
 
-  // Colors for card styling
-  const cardBg = useColorModeValue("white", "gray.700");
-  const cardBorder = useColorModeValue("gray.200", "gray.600");
+  // Sort entries so that new entries appear at the top
+  const sortedEntries = useMemo(() => {
+    return [...searchedEntries].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+  }, [searchedEntries]);
 
   return (
-    <Box p={{ base: 4, md: 8 }} maxW="960px" mx="auto">
+    <Container maxW="container.xl" py={8}>
       {/* Header */}
-      <Flex justify="space-between" align="center" mb={6}>
-        <Heading size="lg">Journal Overview</Heading>
-        <Button onClick={onBack} colorScheme="blue">
+      <Flex justify="space-between" align="center" mb={8}>
+        <Heading as="h1" size="xl">
+          Journal Overview
+        </Heading>
+        <Button onClick={onBack} variant="outline" colorScheme="blue">
           Back
         </Button>
       </Flex>
 
+      {/* Search Bar */}
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
       {/* Tag Filter */}
-      <Box
-        mb={6}
-        p={4}
-        bg={useColorModeValue("gray.50", "gray.800")}
-        borderRadius="md"
-      >
-        <Text mb={2} fontWeight="semibold">
-          Filter by tag:
-        </Text>
-        <HStack spacing={4} wrap="wrap">
-          <Button
-            variant={filterTag === "" ? "solid" : "outline"}
-            onClick={() => setFilterTag("")}
-          >
-            All
-          </Button>
-          {uniqueTags.map((tag) => (
-            <Button
-              key={tag}
-              variant={filterTag === tag ? "solid" : "outline"}
-              onClick={() => setFilterTag(tag)}
-            >
-              #{tag}
-            </Button>
-          ))}
-        </HStack>
-      </Box>
+      <TagFilter
+        filterTag={filterTag}
+        setFilterTag={setFilterTag}
+        uniqueTags={uniqueTags}
+      />
 
       {/* Entries List */}
-      {loading ? (
-        <Flex justify="center" align="center" minH="200px">
-          <Spinner size="xl" />
-        </Flex>
-      ) : error ? (
-        <Text color="red.500">{error}</Text>
-      ) : filteredEntries.length === 0 ? (
-        <Text>No journal entries found.</Text>
-      ) : (
-        // Sort entries so that new entries appear at the top:
-        <VStack spacing={6} align="stretch">
-          {sortedEntries.map((entry, index) => (
-            <Box
-              key={index}
-              p={6}
-              bg={cardBg}
-              borderWidth="1px"
-              borderColor={cardBorder}
-              borderRadius="lg"
-              shadow="md"
-            >
-              <Text fontSize="sm" color="gray.500">
-                {new Date(entry.date).toLocaleString()}
-              </Text>
-              <Text mt={2} fontSize="lg">
-                {entry.text}
-              </Text>
-              {entry.tags.length > 0 && (
-                <HStack spacing={2} mt={3}>
-                  {entry.tags.map((tag, i) => (
-                    <Button
-                      key={i}
-                      size="xs"
-                      variant="solid"
-                      colorScheme="blue"
-                    >
-                      #{tag}
-                    </Button>
-                  ))}
-                </HStack>
-              )}
-            </Box>
-          ))}
-        </VStack>
-      )}
+      <EntriesList
+        loading={loading}
+        sortedEntries={sortedEntries}
+        error={error}
+        cardBg={useColorModeValue("white", "gray.800")}
+        cardBorder={useColorModeValue("gray.200", "gray.700")}
+      />
 
       {/* Sentiment Analysis Section */}
       <Box
@@ -164,7 +118,7 @@ const JournalOverview = ({ onBack }: JournalOverviewProps) => {
           mood has evolved. (Coming soon...)
         </Text>
       </Box>
-    </Box>
+    </Container>
   );
 };
 
