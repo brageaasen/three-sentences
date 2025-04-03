@@ -11,8 +11,10 @@ import { useEffect, useState, useMemo } from "react";
 import SearchBar from "./SearchBar";
 import TagFilter from "./TagFilter";
 import EntriesList from "./EntriesList";
+import EditEntryModal from "./EditEntryModal"; // Import your modal component
 
 interface JournalEntry {
+  id: string;
   text: string;
   date: string;
   tags: string[];
@@ -27,7 +29,9 @@ const JournalOverview = ({ onBack }: JournalOverviewProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filterTag, setFilterTag] = useState("");
-  const [searchTerm, setSearchTerm] = useState(""); // Search state
+  const [searchTerm, setSearchTerm] = useState("");
+  const [editingEntry, setEditingEntry] = useState<JournalEntry | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -72,6 +76,9 @@ const JournalOverview = ({ onBack }: JournalOverviewProps) => {
     );
   }, [searchedEntries]);
 
+  const cardBg = useColorModeValue("white", "gray.800");
+  const cardBorder = useColorModeValue("gray.200", "gray.700");
+
   return (
     <Container maxW="container.xl" py={8}>
       {/* Header */}
@@ -94,13 +101,17 @@ const JournalOverview = ({ onBack }: JournalOverviewProps) => {
         uniqueTags={uniqueTags}
       />
 
-      {/* Entries List */}
+      {/* Entries List with Edit Button */}
       <EntriesList
         loading={loading}
         sortedEntries={sortedEntries}
         error={error}
-        cardBg={useColorModeValue("white", "gray.800")}
-        cardBorder={useColorModeValue("gray.200", "gray.700")}
+        cardBg={cardBg}
+        cardBorder={cardBorder}
+        onEdit={(entry) => {
+          setEditingEntry(entry);
+          setIsEditModalOpen(true);
+        }}
       />
 
       {/* Sentiment Analysis Section */}
@@ -118,6 +129,35 @@ const JournalOverview = ({ onBack }: JournalOverviewProps) => {
           mood has evolved. (Coming soon...)
         </Text>
       </Box>
+
+      {/* Edit Entry Modal */}
+      <EditEntryModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        entry={editingEntry}
+        onSave={async (updatedEntry: JournalEntry) => {
+          const res = await fetch(
+            `http://localhost:5235/entries/${updatedEntry.id}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(updatedEntry),
+            },
+          );
+          if (!res.ok) {
+            console.error("Failed to update entry");
+          } else {
+            // Refresh entries from backend after successful update
+            const fetchEntries = async () => {
+              const res = await fetch("http://localhost:5235/entries");
+              const data = await res.json();
+              setEntries(data);
+            };
+            await fetchEntries();
+          }
+          setIsEditModalOpen(false);
+        }}
+      />
     </Container>
   );
 };

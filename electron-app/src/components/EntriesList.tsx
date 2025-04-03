@@ -1,113 +1,73 @@
-import {
-  Box,
-  Flex,
-  VStack,
-  Text,
-  HStack,
-  Button,
-  Spinner,
-  useColorModeValue,
-  Icon,
-} from "@chakra-ui/react";
-import { FiSearch } from "react-icons/fi"; // Visual fallback icon
+import { VStack, Box, Text, HStack, Button, useColorModeValue } from "@chakra-ui/react";
 
-interface Entry {
-  date: string;
+interface JournalEntry {
+  id: string;
   text: string;
-  tags?: string[];
+  date: string;
+  tags: string[];
 }
 
 interface EntriesListProps {
   loading: boolean;
-  sortedEntries: Entry[];
   error: string | null;
+  sortedEntries: JournalEntry[];
   cardBg: string;
   cardBorder: string;
+  onEdit: (entry: JournalEntry) => void; // new callback prop
 }
 
-const EntriesList = ({
-  loading,
-  sortedEntries,
-  error,
-  cardBg,
-  cardBorder,
-}: EntriesListProps) => {
-  const mutedText = useColorModeValue("gray.500", "gray.400");
-
+const EntriesList = ({ loading, error, sortedEntries, cardBg, cardBorder, onEdit }: EntriesListProps) => {
   if (loading) {
     return (
-      <Flex justify="center" align="center" minH="200px">
-        <Spinner size="xl" />
-      </Flex>
+      <Box minH="200px" display="flex" justifyContent="center" alignItems="center">
+        {/* Spinner could go here */}
+        <Text>Loading...</Text>
+      </Box>
     );
   }
-
   if (error) {
-    return (
-      <Flex justify="center" align="center" minH="200px">
-        <Text color="red.500" fontSize="md">
-          {error}
-        </Text>
-      </Flex>
-    );
+    return <Text color="red.500">{error}</Text>;
   }
-
   if (sortedEntries.length === 0) {
-    return (
-      <Flex
-        direction="column"
-        align="center"
-        justify="center"
-        py={10}
-        minH="200px"
-        color={mutedText}
-      >
-        <Icon as={FiSearch} boxSize={8} mb={4} opacity={0.6} />
-        <Text fontSize="lg" fontWeight="medium">
-          No entries found
-        </Text>
-        <Text fontSize="sm" textAlign="center" maxW="sm" mt={1}>
-          Try adjusting your search or filters to see more results.
-        </Text>
-      </Flex>
-    );
+    return <Text>No journal entries found.</Text>;
   }
-
   return (
     <VStack spacing={6} align="stretch">
       {sortedEntries.map((entry, index) => (
         <Box
-          key={index}
+          key={entry.id || index}
           p={6}
           bg={cardBg}
           borderWidth="1px"
           borderColor={cardBorder}
           borderRadius="lg"
-          boxShadow="sm"
-          transition="all 0.2s ease"
-          _hover={{ transform: "scale(1.02)", boxShadow: "md" }}
+          shadow="md"
+          transition="transform 0.2s"
+          _hover={{ transform: "scale(1.02)" }}
         >
-          <Text fontSize="sm" color={mutedText}>
+          <Text fontSize="sm" color={useColorModeValue("gray.500", "gray.400")}>
             {new Date(entry.date).toLocaleString()}
           </Text>
-          <Text mt={2} fontSize="lg" fontWeight="medium">
+          <Text mt={2} fontSize="lg">
             {entry.text}
           </Text>
           {entry.tags?.length > 0 && (
-            <HStack spacing={2} mt={3} wrap="wrap">
+            <HStack spacing={2} mt={3}>
               {entry.tags.map((tag, i) => (
-                <Button
-                  key={i}
-                  size="xs"
-                  variant="solid"
-                  colorScheme="blue"
-                  borderRadius="full"
-                >
+                <Button key={i} size="xs" variant="solid" colorScheme="blue">
                   #{tag}
                 </Button>
               ))}
             </HStack>
           )}
+          <Button
+            mt={3}
+            size="sm"
+            onClick={() => onEdit(entry)}
+            colorScheme="teal"
+          >
+            Edit
+          </Button>
         </Box>
       ))}
     </VStack>
