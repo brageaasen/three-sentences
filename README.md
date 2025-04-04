@@ -62,7 +62,4 @@ Data is stored in JournalAPI/entries.json.
 ---
 
 ## Planned Improvements
-- Tag filtering and search
-- Sentiment analysis of entries
-- Daily entry reminders via tray popup / Applications randomly opens once a day
-- Option to save or "explode" entry
+- See github issues tab
