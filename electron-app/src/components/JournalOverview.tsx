@@ -6,12 +6,15 @@ import {
   Flex,
   Box,
   useColorModeValue,
+  SimpleGrid,
+  IconButton,
+  HStack,
 } from "@chakra-ui/react";
+import { EditIcon } from "@chakra-ui/icons";
 import { useEffect, useState, useMemo } from "react";
 import SearchBar from "./SearchBar";
 import TagFilter from "./TagFilter";
-import EntriesList from "./EntriesList";
-import EditEntryModal from "./EditEntryModal"; // Import your modal component
+import EditEntryModal from "./EditEntryModal";
 
 interface JournalEntry {
   id: string;
@@ -92,7 +95,9 @@ const JournalOverview = ({ onBack }: JournalOverviewProps) => {
       </Flex>
 
       {/* Search Bar */}
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Box maxW="600px" mx="auto" mb={6}>
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      </Box>
 
       {/* Tag Filter */}
       <TagFilter
@@ -101,18 +106,70 @@ const JournalOverview = ({ onBack }: JournalOverviewProps) => {
         uniqueTags={uniqueTags}
       />
 
-      {/* Entries List with Edit Button */}
-      <EntriesList
-        loading={loading}
-        sortedEntries={sortedEntries}
-        error={error}
-        cardBg={cardBg}
-        cardBorder={cardBorder}
-        onEdit={(entry) => {
-          setEditingEntry(entry);
-          setIsEditModalOpen(true);
-        }}
-      />
+      {/* Entries List in a Responsive Grid */}
+      {loading ? (
+        <Flex justify="center" align="center" minH="200px">
+          <Text>Loading...</Text>
+        </Flex>
+      ) : error ? (
+        <Text color="red.500">{error}</Text>
+      ) : sortedEntries.length === 0 ? (
+        <Text>No journal entries found.</Text>
+      ) : (
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
+          {sortedEntries.map((entry) => (
+            <Box
+              key={entry.id}
+              p={6}
+              bg={cardBg}
+              borderWidth="1px"
+              borderColor={cardBorder}
+              borderRadius="lg"
+              shadow="md"
+              position="relative"
+              transition="transform 0.2s"
+              _hover={{ transform: "scale(1.02)" }}
+            >
+              {/* Edit Icon positioned at the top right */}
+              <IconButton
+                aria-label="Edit entry"
+                icon={<EditIcon />}
+                size="sm"
+                position="absolute"
+                top={2}
+                right={2}
+                onClick={() => {
+                  setEditingEntry(entry);
+                  setIsEditModalOpen(true);
+                }}
+              />
+              <Text
+                fontSize="sm"
+                color={useColorModeValue("gray.500", "gray.400")}
+              >
+                {new Date(entry.date).toLocaleString()}
+              </Text>
+              <Text mt={2} fontSize="lg">
+                {entry.text}
+              </Text>
+              {entry.tags?.length > 0 && (
+                <HStack spacing={2} mt={3}>
+                  {entry.tags.map((tag, i) => (
+                    <Button
+                      key={i}
+                      size="xs"
+                      variant="solid"
+                      colorScheme="blue"
+                    >
+                      #{tag}
+                    </Button>
+                  ))}
+                </HStack>
+              )}
+            </Box>
+          ))}
+        </SimpleGrid>
+      )}
 
       {/* Sentiment Analysis Section */}
       <Box
