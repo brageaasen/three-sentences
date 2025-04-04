@@ -43,12 +43,16 @@ function App() {
       });
     } catch (err) {
       console.error("Error saving entry:", err);
-      toast({
-        title: "Error saving entry",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+
+      if (!toast.isActive("failed-saveing-warning")) {
+        toast({
+          id: "failed-saveing-warning",
+          title: "Error saving entry",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
 
